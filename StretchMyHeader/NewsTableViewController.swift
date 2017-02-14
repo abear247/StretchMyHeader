@@ -9,7 +9,25 @@
 import UIKit
 
 class NewsTableViewController: UITableViewController {
-    //Mark: Enum
+    
+    //Mark: Properties
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var newsImageView: UIImageView!
+    private let kTableHeaderHeight:  CGFloat = 250.0
+    private let kTableHeaderCutAway: CGFloat = 80.0
+    var headerMaskLayer: CAShapeLayer!
+    
+    let news = [NewsItem.init(category: Categories.World, news: "Climate change protests, divestments meet fossil fuels realities"),
+                NewsItem.init(category: Categories.Europe, news: "Scotland's 'Yes' leader says independence vote is 'once in a lifetime'"),
+                NewsItem.init(category: Categories.MiddleEast, news: "Airstrikes boost Islamic State, FBI director warns more hostages possible"),
+                NewsItem.init(category: Categories.Africa, news: "Nigeria says 70 dead in building collapse; questions S. Africa victim claim"),
+                NewsItem.init(category: Categories.AsiaPacific, news: "Despite UN ruling, Japan seeks backing for whale hunting"),
+                NewsItem.init(category: Categories.Americas, news: "Officials: FBI is tracking 100 Americans who fought alongside IS in Syria"),
+                NewsItem.init(category: Categories.World, news: "South Africa in $40 billion deal for Russian nuclear reactors"),
+                NewsItem.init(category: Categories.Europe, news: "'One million babies' created by EU student exchanges")]
+    
+    //MARK: Enum
     enum Categories: Int {
         case World
         case Europe
@@ -29,50 +47,44 @@ class NewsTableViewController: UITableViewController {
             case .Africa:
                 return (UIColor.orange,"Africa")
             case .AsiaPacific:
-                return (UIColor.purple,"Asia Pacific")
+                return (UIColor.cyan,"Asia Pacific")
             case .Americas:
                 return (UIColor.blue,"Americas")
             }
         }
     }
     
-// Mark: Struct
+    // MARK: Struct
     struct NewsItem {
         var category: Categories
         var news: String
     }
 
-    //Mark: Properties
-    let news = [NewsItem.init(category: Categories.World, news: "Climate change protests, divestments meet fossil fuels realities"),
-                NewsItem.init(category: Categories.Europe, news: "Scotland's 'Yes' leader says independence vote is 'once in a lifetime'"),
-                NewsItem.init(category: Categories.MiddleEast, news: "Airstrikes boost Islamic State, FBI director warns more hostages possible"),
-                NewsItem.init(category: Categories.Africa, news: "Nigeria says 70 dead in building collapse; questions S. Africa victim claim"),
-                NewsItem.init(category: Categories.AsiaPacific, news: "Despite UN ruling, Japan seeks backing for whale hunting"),
-                NewsItem.init(category: Categories.Americas, news: "Officials: FBI is tracking 100 Americans who fought alongside IS in Syria"),
-                NewsItem.init(category: Categories.World, news: "South Africa in $40 billion deal for Russian nuclear reactors"),
-                NewsItem.init(category: Categories.Europe, news: "'One million babies' created by EU student exchanges")]
-
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd"
+        let stringDate: String = dateFormatter.string(from: Date())
+        dateLabel.text = stringDate
+        
+        headerView = tableView.tableHeaderView
+        tableView.tableHeaderView = nil
+        tableView.addSubview(headerView)
+        
+        tableView.contentInset = UIEdgeInsets(top: kTableHeaderHeight, left: 0, bottom: 0, right: 0)
+        tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderHeight)
+        
+        let effectiveHeight = kTableHeaderHeight-kTableHeaderCutAway/2
+        tableView.contentInset = UIEdgeInsets(top: effectiveHeight, left: 0, bottom: 0, right: 0)
+        tableView.contentOffset = CGPoint(x: 0, y: -effectiveHeight)
+        
+        headerMaskLayer = CAShapeLayer()
+        headerMaskLayer.fillColor = UIColor.black.cgColor
+        headerView.layer.mask = headerMaskLayer
+        
+        updateHeaderView()
     }
 
     // MARK: - Table view data source
@@ -82,10 +94,9 @@ class NewsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return news.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
         let newsItem = news[indexPath.row]
@@ -96,57 +107,38 @@ class NewsTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateHeaderView()
+    }
     
- 
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    //MARK: helper functions
+    func updateHeaderView(){
+        let effectiveHeight = kTableHeaderHeight-kTableHeaderCutAway/2
+        var headerRect = CGRect(x: 0, y: -effectiveHeight, width: tableView.bounds.width, height: kTableHeaderHeight)
+        if tableView.contentOffset.y < -effectiveHeight {
+            headerRect.origin.y = tableView.contentOffset.y
+            headerRect.size.height = -tableView.contentOffset.y + kTableHeaderCutAway/2
+        }
+        headerView.frame = headerRect
+        
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to: CGPoint(x: headerRect.width, y: 0))
+        path.addLine(to: CGPoint(x: headerRect.width, y: headerRect.height))
+        path.addLine(to: CGPoint(x: 0, y: headerRect.height-kTableHeaderCutAway))
+        headerMaskLayer?.path = path.cgPath
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 

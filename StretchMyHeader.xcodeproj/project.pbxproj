@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C8C96A2B1E535ABC009FF982 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C96A2A1E535ABC009FF982 /* AppDelegate.swift */; };
-		C8C96A2D1E535ABC009FF982 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C96A2C1E535ABC009FF982 /* ViewController.swift */; };
 		C8C96A301E535ABC009FF982 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8C96A2E1E535ABC009FF982 /* Main.storyboard */; };
 		C8C96A321E535ABC009FF982 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8C96A311E535ABC009FF982 /* Assets.xcassets */; };
 		C8C96A351E535ABC009FF982 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8C96A331E535ABC009FF982 /* LaunchScreen.storyboard */; };
@@ -30,7 +29,6 @@
 /* Begin PBXFileReference section */
 		C8C96A271E535ABC009FF982 /* StretchMyHeader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StretchMyHeader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8C96A2A1E535ABC009FF982 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C8C96A2C1E535ABC009FF982 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C8C96A2F1E535ABC009FF982 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C8C96A311E535ABC009FF982 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8C96A341E535ABC009FF982 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -82,7 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				C8C96A2A1E535ABC009FF982 /* AppDelegate.swift */,
-				C8C96A2C1E535ABC009FF982 /* ViewController.swift */,
 				C8C96A4C1E535C4F009FF982 /* NewsTableViewController.swift */,
 				C8C96A4A1E535B32009FF982 /* CustomTableViewCell.swift */,
 				C8C96A2E1E535ABC009FF982 /* Main.storyboard */,
@@ -207,7 +204,6 @@
 			files = (
 				C8C96A4D1E535C4F009FF982 /* NewsTableViewController.swift in Sources */,
 				C8C96A4B1E535B32009FF982 /* CustomTableViewCell.swift in Sources */,
-				C8C96A2D1E535ABC009FF982 /* ViewController.swift in Sources */,
 				C8C96A2B1E535ABC009FF982 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
