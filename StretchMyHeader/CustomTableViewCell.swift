@@ -9,7 +9,10 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
-
+    //MARK: Properties
+    @IBOutlet weak var category: UILabel!
+    @IBOutlet weak var headline: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

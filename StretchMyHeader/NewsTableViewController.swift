@@ -9,15 +9,65 @@
 import UIKit
 
 class NewsTableViewController: UITableViewController {
+    //Mark: Enum
+    enum Categories: Int {
+        case World
+        case Europe
+        case MiddleEast
+        case Africa
+        case AsiaPacific
+        case Americas
+        
+        func Category() -> (colour: UIColor,name: String) {
+            switch (self) {
+            case .World:
+                return (UIColor.red,"World")
+            case .Europe:
+                return (UIColor.green,"Europe")
+            case .MiddleEast:
+                return (UIColor.yellow,"Middle East")
+            case .Africa:
+                return (UIColor.orange,"Africa")
+            case .AsiaPacific:
+                return (UIColor.purple,"Asia Pacific")
+            case .Americas:
+                return (UIColor.blue,"Americas")
+            }
+        }
+    }
+    
+// Mark: Struct
+    struct NewsItem {
+        var category: Categories
+        var news: String
+    }
+
+    //Mark: Properties
+    let news = [NewsItem.init(category: Categories.World, news: "Climate change protests, divestments meet fossil fuels realities"),
+                NewsItem.init(category: Categories.Europe, news: "Scotland's 'Yes' leader says independence vote is 'once in a lifetime'"),
+                NewsItem.init(category: Categories.MiddleEast, news: "Airstrikes boost Islamic State, FBI director warns more hostages possible"),
+                NewsItem.init(category: Categories.Africa, news: "Nigeria says 70 dead in building collapse; questions S. Africa victim claim"),
+                NewsItem.init(category: Categories.AsiaPacific, news: "Despite UN ruling, Japan seeks backing for whale hunting"),
+                NewsItem.init(category: Categories.Americas, news: "Officials: FBI is tracking 100 Americans who fought alongside IS in Syria"),
+                NewsItem.init(category: Categories.World, news: "South Africa in $40 billion deal for Russian nuclear reactors"),
+                NewsItem.init(category: Categories.Europe, news: "'One million babies' created by EU student exchanges")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = UITableViewAutomaticDimension
+    
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,15 +85,23 @@ class NewsTableViewController: UITableViewController {
         return 5
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
+        let newsItem = news[indexPath.row]
+        let category = newsItem.category
+        cell.category.textColor = category.Category().colour
+        cell.category.text = category.Category().name
+        cell.headline.text = newsItem.news
         return cell
     }
-    */
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    
+ 
 
     /*
     // Override to support conditional editing of the table view.
@@ -91,3 +149,4 @@ class NewsTableViewController: UITableViewController {
     */
 
 }
+
